@@ -115,8 +115,8 @@ public class MarcheService {
 
           for(SituationDetail std : lastSituation.getSituationdetail()){
               if(std.getPrix().getQte() != null && std.getPrix().getQte() !=0)
-                  avReel.add((double) Math.round(std.getQteprecu()/std.getPrix().getQte()));
-              avPgt.add((double) Math.round(std.getQtereacu()/std.getPrix().getQte()));
+                  avReel.add((double) Math.round(100*std.getQteprecu()/std.getPrix().getQte()));
+              avPgt.add((double) Math.round(100*std.getQtereacu()/std.getPrix().getQte()));
               prix.add(std.getPrix().getPrix());
           }
 
