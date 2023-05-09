@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.Dao.SituationDetail_Repo;
+import com.example.demo.Dtos.RadioDTO;
+import com.example.demo.Dtos.SituationsSummaryDTO;
 import com.example.demo.Model.*;
 import com.example.demo.Service.MarcheService;
 import com.example.demo.Service.PrixService;
@@ -12,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
     @RequestMapping("rest")
@@ -135,6 +140,27 @@ public class Controller {
             return ResponseEntity.ok(savedMarche);
         }
 
+
+
+    @GetMapping("/getEvolutionAvancement/{marcheId}")
+        public SituationsSummaryDTO getEvolutionAvancement(@PathVariable Long marcheId) {
+        System.out.println(marcheId);
+        if(marcheId != null){
+            return this.marcheService.getEvolutionAvancement(marcheId);
+        }
+        return  null;
+
+
+    }
+
+    @GetMapping("/getRadar/{marcheId}")
+    public RadioDTO getRadar(@PathVariable Long marcheId) {
+        System.out.println(marcheId);
+        if(marcheId != null) {
+            return this.marcheService.getRadar(marcheId);
+        }
+        return  null;
+    }
 
 
 

@@ -1,15 +1,18 @@
 package com.example.demo.Dao;
 
+import com.example.demo.Dtos.SituationsSummaryDTO;
 import com.example.demo.Model.*;
+import com.example.demo.Service.MarcheService;
 import com.example.demo.Service.Service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class Projet_RepoTest {
@@ -29,6 +32,9 @@ class Projet_RepoTest {
     @Autowired
     public Marche_Repo marche_repo;
 
+
+    @Autowired
+    public MarcheService marcheService;
 
 
     @Test
@@ -120,6 +126,53 @@ public void get(){
 
     }
 
+
+
+
+    public String getformatedDate(Date d){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        if(d != null){
+            return  formatter.format(d);
+
+        }
+        return "-----";
+    }
+
+    public ResponseEntity<Situation> getLastSituationForMarche(@RequestBody Marche marche) {
+        Situation lastSituation = marcheService.getLastSituationForMarche(marche);
+        if (lastSituation == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lastSituation);
+    }
+
+    @Test
+    public void help(){
+
+        Marche marche = marche_repo.findById(179L).get();
+        Situation lastSituation = marcheService.getLastSituationForMarche(marche);
+
+        List<Double> avReel = new ArrayList<>();
+        List<Double> avPgt = new ArrayList<>();
+        List<String> prix = new ArrayList<>();
+
+
+
+        for(SituationDetail std : lastSituation.getSituationdetail()){
+            if(std.getPrix().getQte() != null && std.getPrix().getQte() !=0)
+                avReel.add((double) Math.round(std.getQteprecu()/std.getPrix().getQte()));
+                avPgt.add((double) Math.round(std.getQtereacu()/std.getPrix().getQte()));
+                prix.add(std.getPrix().getPrix());
+        }
+
+        System.out.println(avReel);
+        System.out.println(avPgt);
+        System.out.println(prix);
+
+
+
+
+    }
 
 
 }
