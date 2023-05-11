@@ -33,7 +33,14 @@ public class Marche {
     private Date dateOverturePlit;
     private String n_appel_offre;
 
+    private Double estimationao;
+    private Double montantengage;
 
+
+    private String etape_etude;
+    private String status_etude;
+    private String delegation;
+    private String status_marche;
 
 //    @OneToMany(mappedBy = "marche", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 

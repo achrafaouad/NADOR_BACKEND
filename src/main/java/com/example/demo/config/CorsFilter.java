@@ -34,7 +34,6 @@ public class CorsFilter implements Filter {
         response
                 .setHeader("Access-Control-Allow-Headers", "Origin, origin, x-requested-with, authorization, " +
                         "Content-Type, Authorization, credential, X-XSRF-TOKEN");
-
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {

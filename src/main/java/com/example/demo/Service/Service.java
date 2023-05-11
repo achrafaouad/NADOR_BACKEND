@@ -1,10 +1,12 @@
 package com.example.demo.Service;
 
 import com.example.demo.Dao.*;
+import com.example.demo.Dtos.GeoJsonResultDTO;
 import com.example.demo.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class Service {

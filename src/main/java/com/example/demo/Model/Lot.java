@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -32,11 +33,19 @@ public class Lot {
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    @JoinColumn(name = "marche")
 
-    @JsonIgnoreProperties({"lot"})
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "marche")
-    private Marche marche;
 
+    @JsonIgnoreProperties({"projet"})
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Section> sections;
+
+//    @JsonIgnoreProperties({"lot"})
+//    @OneToOne(cascade=CascadeType.ALL)
+//    @JoinColumn(name = "marche")
+//    private Marche marche;
+
+    @JsonIgnoreProperties({"projet"})
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Marche> marches;
 
 
 

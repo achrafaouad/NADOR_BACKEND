@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @RestController
     @RequestMapping("rest")
 public class Controller {
@@ -59,11 +59,13 @@ public class Controller {
     public ResponseEntity<?> saveProject(@RequestBody Projet projet){
 
         Projet p = this.service.saveProjet(projet);
-
-        for(Section s: p.getSections()){
-            this.service.saveGeom(PersistgeomSections.builder().section(s.getId_section()).geometry(s.getGeom()).build());
-
+        //todo
+        for(Lot l : p.getLots()){
+            for(Section s: l.getSections()){
+                this.service.saveGeom(PersistgeomSections.builder().section(s.getId_section()).geometry(s.getGeom()).build());
+            }
         }
+
         return new ResponseEntity<>(p,HttpStatus.OK);
     }
 
@@ -72,12 +74,13 @@ public class Controller {
     @PostMapping(value = "/getGeomProjet" ,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getGeomProjet(@RequestBody Projet projet){
-
+        System.out.println(projet.getId());
         return new ResponseEntity<>(this.service.getGeomProjet(projet.getId()),HttpStatus.OK);
     }
 
     @PostMapping(value = "/saveMarchetoLot")
     public ResponseEntity<?> saveMarchetoLot(@RequestBody Lot lot){
+
         return new ResponseEntity<>(this.service.saveLot(lot),HttpStatus.OK);
     }
 
@@ -128,10 +131,6 @@ public class Controller {
         @PostMapping("/saveMarche")
         public ResponseEntity<Marche> saveMarche(@RequestBody Marche marche) {
 
-            System.out.println(marche);
-
-            System.out.println(marche.getSituations());
-
             List<Situation> st = this.situationService.saveSituations(marche.getSituations());
             marche.setSituations(st);
             Marche savedMarche = marcheService.saveMarche(marche);
@@ -139,6 +138,26 @@ public class Controller {
 
             return ResponseEntity.ok(savedMarche);
         }
+
+    @PostMapping("/saveMarcheAfterInit")
+    public ResponseEntity<Marche> saveMarcheAfterInit(@RequestBody Marche marche) {
+
+
+
+        List<Prix> prx = this.prixService.saveAll(marche.getPrixes());
+        marche.setPrixes(prx);
+
+        Marche savedMarche = marcheService.saveMarche(marche);
+
+        for (Prix p: savedMarche.getPrixes()){
+            p.setMarche(savedMarche);
+        }
+
+        this.prixService.saveAll(savedMarche.getPrixes());
+
+
+        return ResponseEntity.ok(savedMarche);
+    }
 
 
 

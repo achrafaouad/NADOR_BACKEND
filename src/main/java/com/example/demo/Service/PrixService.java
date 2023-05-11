@@ -5,6 +5,7 @@ import com.example.demo.Model.Marche;
 import com.example.demo.Model.Prix;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 @org.springframework.stereotype.Service
 public class PrixService {
@@ -18,6 +19,11 @@ public class PrixService {
         return this.prixRepository.findById(id).orElse(null);
     }
 
+
+
+    public List<Prix> saveAll(List<Prix> prixList){
+         return this.prixRepository.saveAll(prixList);
+    }
 
 
 

@@ -43,9 +43,9 @@ public class Projet {
     private Set<Lot> lots;
 
 
-    @JsonIgnoreProperties({"projet"})
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Section> sections;
+//    @JsonIgnoreProperties({"projet"})
+//    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Set<Section> sections;
 
 
 

@@ -44,7 +44,6 @@ public class MarcheService {
                 .orElse(null);
 
 
-        System.out.println(lastSituation);
         return lastSituation;
     }
 
@@ -69,6 +68,8 @@ public class MarcheService {
 
     public SituationsSummaryDTO getEvolutionAvancement(Long marcheID) {
         Marche marche = this.marche_repo.findById(marcheID).get();
+
+
         List<Situation> sortedSituations = marche.getSituations().stream()
                 .sorted(Comparator.comparing(Situation::getId_situation))
                 .collect(Collectors.toList());
@@ -76,16 +77,19 @@ public class MarcheService {
         List<Double> avReel = new ArrayList<>();
         List<Double> avPgt = new ArrayList<>();
         List<String> Dates = new ArrayList<>();
-        System.out.println(sortedSituations);
+
         for(Situation st : sortedSituations){
             Double avReelval = 0D;
             Double avPgtval = 0D;
             Double montant = 0D;
             if(st.getDatesituation()!= null){
                 for ( SituationDetail situationDetail: st.getSituationdetail()){
-                    avReelval = avReelval+ situationDetail.getPrix().getPu() * situationDetail.getQteprecu();
-                    avPgtval = avPgtval+ situationDetail.getPrix().getPu() * situationDetail.getQtereacu();
-                    montant = montant+ situationDetail.getPrix().getMontant();
+                    if(situationDetail.getPrix().getPu()!=null &&  situationDetail.getQteprecu() !=null && situationDetail.getQtereacu()!= null){
+                        avReelval = avReelval+ situationDetail.getPrix().getPu() * situationDetail.getQteprecu();
+                        avPgtval = avPgtval+ situationDetail.getPrix().getPu() * situationDetail.getQtereacu();
+                        montant = montant+ situationDetail.getPrix().getMontant();
+                    }
+
                 }
 
                 avReel.add( (double) Math.round(100* avReelval/montant));
@@ -105,6 +109,7 @@ public class MarcheService {
       public RadioDTO getRadar(Long marcheID){
 
           Marche marche = this.marche_repo.findById(marcheID).get();
+
           Situation lastSituation = this.getLastSituationForMarche(marche);
 
           List<Double> avReel = new ArrayList<>();
@@ -114,15 +119,13 @@ public class MarcheService {
 
 
           for(SituationDetail std : lastSituation.getSituationdetail()){
-              if(std.getPrix().getQte() != null && std.getPrix().getQte() !=0)
+              if(std.getPrix().getQte() != null && std.getPrix().getQte() !=0 && std.getQteprecu() != null &&  std.getQtereacu()!= null){
                   avReel.add((double) Math.round(100*std.getQteprecu()/std.getPrix().getQte()));
-              avPgt.add((double) Math.round(100*std.getQtereacu()/std.getPrix().getQte()));
-              prix.add(std.getPrix().getPrix());
-          }
+                  avPgt.add((double) Math.round(100*std.getQtereacu()/std.getPrix().getQte()));
+                  prix.add(std.getPrix().getPrix());
+              }
 
-          System.out.println(avReel);
-          System.out.println(avPgt);
-          System.out.println(prix);
+          }
 
 
           RadioDTO radioDTO = new RadioDTO(avReel, avPgt, prix);
