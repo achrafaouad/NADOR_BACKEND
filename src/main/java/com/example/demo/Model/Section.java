@@ -22,12 +22,22 @@ public class Section {
     @Column(name = "id_section", nullable = false)
     private Long id_section;
 
+    private  Double  pkd ;
+    private  Double  pkf ;
+    private  String  type ;
+
     @Transient
     private String geom;
 
 
-    @ManyToOne(cascade=CascadeType.MERGE)
+//    @ManyToOne(cascade=CascadeType.MERGE)
+//    @JoinColumn(name = "province")
+//    private Province province;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "province")
     private Province province;
+
 
 }
