@@ -77,6 +77,16 @@ private Section_Repo sectionRepository;
     }
 
 
+ public  List<String> getGeomProjetwithSomeAdditionalData(Long id_projet) {
+        try {
+            return this.projetRepository.getGeomProjetwithSomeAdditionalData(id_projet);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    return null;
+    }
+
+
 
 
 

@@ -89,6 +89,15 @@ public class Controller {
         return new ResponseEntity<>(this.service.getGeomProjet(projet.getId()), HttpStatus.OK);
     }
 
+
+    @PostMapping(value = "/getGeomProjetwithSomeAdditionalData",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+
+    public ResponseEntity<?> getGeomProjetwithSomeAdditionalData(@RequestBody Projet projet) {
+        System.out.println(projet.getId());
+        return new ResponseEntity<>(this.service.getGeomProjetwithSomeAdditionalData(projet.getId()), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/saveMarchetoLot")
 
     public ResponseEntity<?> saveMarchetoLot(@RequestBody Lot lot) {

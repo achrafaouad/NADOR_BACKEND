@@ -27,4 +27,18 @@ public interface Projet_Repo extends JpaRepository<Projet,Long>  {
             "JOIN lot l ON l.id = pl.lots_id\n" +
             "WHERE projet_id = :projectId ", nativeQuery = true)
     List<String>getGeomProjet(@Param("projectId") Long projectId);
+
+
+    @Query(value = "SELECT CAST(jsonb_build_object(\n" +
+            "          'type', 'Feature',\n" +
+            "           'properties', jsonb_build_object('intitule', l.intitule,'type',s.type,'pkd',s.pkd,'pkf',s.pkf,'lots_id',pl.lots_id,'length',ST_Length(s.geom) ),\n" +
+            "         'geometry', ST_AsGeoJSON(s.geom)\n" +
+            "         ) AS TEXT) AS json_result\n" +
+            "            FROM section s\n" +
+            "            JOIN lot_sections ps ON s.id_section = ps.sections_id_section\n" +
+            "           JOIN projet_lots pl ON ps.lot_id = pl.lots_id\n" +
+            "            JOIN lot l ON l.id = pl.lots_id\n" +
+            "           WHERE projet_id = :projectId ", nativeQuery = true)
+    List<String>getGeomProjetwithSomeAdditionalData(@Param("projectId") Long projectId);
+
 }
